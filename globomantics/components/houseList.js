@@ -1,23 +1,32 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import HouseRow, { HouseRowMem } from "./houseRow";
+// const housesArray = [
+//     {
+//       id: 1,
+//       address: "12 Valley of Kings, Geneva",
+//       country: "Switzerland",
+//       price: 900000,
+//     },
+//     {
+//       id: 2,
+//       address: "89 Road of Forks, Bern",
+//       country: "Switzerland",
+//       price: 500000,
+//     },
+//   ];
 
-const housesArray = [
-    {
-      id: 1,
-      address: "12 Valley of Kings, Geneva",
-      country: "Switzerland",
-      price: 900000,
-    },
-    {
-      id: 2,
-      address: "89 Road of Forks, Bern",
-      country: "Switzerland",
-      price: 500000,
-    },
-  ];
+const HouseList = ({selectHouse}) =>{
+    const [houses,setHouses]=useState([]);
+    
+    useEffect(()=>{
+        const fetchHouses =async ()=>{
+        const response= await fetch("/api/houses");
+        const houses=await response.json();
+        setHouses(houses);
+        }
+        fetchHouses();
+    });
 
-const HouseList = () =>{
-    const [houses,setHouses]=useState(housesArray);
     const addHouse = () => {
         setHouses([
           ...houses,
@@ -46,7 +55,7 @@ const HouseList = () =>{
               </tr>
             </thead>
             <tbody>
-              {houses.map((h) => <HouseRowMem key={h.id} house={h}/>
+              {houses.map((h) => <HouseRowMem key={h.id} house={h} selectHouse={selectHouse}/>
                
                 // house={h} />
               )}
